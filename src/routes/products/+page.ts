@@ -1,4 +1,4 @@
-import { ProductListPaginatedDocument } from "@gql";
+import { ProductListPaginatedDocument } from "@gql/graphql";
 import { executeGraphQL } from "@lib/graphql";
 import type { PageLoad } from "./$types";
 

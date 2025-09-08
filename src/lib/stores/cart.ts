@@ -2,7 +2,7 @@ import { writable } from "svelte/store";
 import { browser } from "$app/environment";
 import { getIdFromCookies, saveIdToCookie, findOrCreate } from "@lib/checkout";
 import { executeGraphQL } from "@lib/graphql";
-import { CheckoutAddLineDocument, CheckoutDeleteLinesDocument } from "@gql";
+import { CheckoutAddLineDocument, CheckoutDeleteLinesDocument } from "@gql/graphql";
 import type { CheckoutFragmentFragment } from "@gql";
 
 interface CartState {

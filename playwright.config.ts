@@ -39,20 +39,23 @@ try {
 function isServerRunning(url: string): Promise<boolean> {
 	return new Promise((resolve) => {
 		const urlObj = new URL(url);
-		const port = parseInt(urlObj.port) || (urlObj.protocol === 'https:' ? 443 : 80);
+		const port = parseInt(urlObj.port) || (urlObj.protocol === "https:" ? 443 : 80);
 		const hostname = urlObj.hostname;
 
-		const req = http.get({
-			hostname,
-			port,
-			path: '/',
-			timeout: 2000
-		}, (res) => {
-			resolve(res.statusCode !== undefined && res.statusCode < 500);
-		});
+		const req = http.get(
+			{
+				hostname,
+				port,
+				path: "/",
+				timeout: 2000,
+			},
+			(res) => {
+				resolve(res.statusCode !== undefined && res.statusCode < 500);
+			},
+		);
 
-		req.on('error', () => resolve(false));
-		req.on('timeout', () => {
+		req.on("error", () => resolve(false));
+		req.on("timeout", () => {
 			req.destroy();
 			resolve(false);
 		});
@@ -63,19 +66,19 @@ function isServerRunning(url: string): Promise<boolean> {
 function getServerCommand(targetUrl: string): string {
 	const urlObj = new URL(targetUrl);
 	const port = parseInt(urlObj.port) || 3000;
-	const dotenvCmd = packageManager === "pnpm" ? "pnpm exec dotenv-cli" : "npx dotenv-cli";
+	const dotenvCmd = packageManager === "pnpm" ? "pnpm dlx dotenv-cli" : "npx dotenv-cli";
 
 	// Determine environment by port convention
 	switch (port) {
 		case 3000: // Development
 			return `${dotenvCmd} -e .env.development -- ${packageManager} run dev`;
-		
+
 		case 3001: // Production
 			return `${packageManager} run build:production && ${dotenvCmd} -e .env.production -- ${packageManager} run start`;
-		
+
 		case 3002: // Test
 			return `${dotenvCmd} -e .env.test -- ${packageManager} run build && ${dotenvCmd} -e .env.test -- ${packageManager} run start`;
-		
+
 		default:
 			// Fallback to development
 			return `${dotenvCmd} -e .env.development -- ${packageManager} run dev`;
@@ -123,8 +126,6 @@ const testConfig = {
 		// },
 	],
 };
-
-
 
 // Configure webServer to auto-start if needed
 const serverCommand = getServerCommand(baseURL);
