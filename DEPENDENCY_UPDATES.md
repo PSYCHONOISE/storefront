@@ -120,6 +120,10 @@ This document tracks the dependency update process performed on 2025-11-11. The 
    - Added environment-specific SvelteKit configurations
    - Fixed parallel environment execution conflicts
    - Added port conflict detection script
+5. **GitHub Actions CI/CD**:
+   - Fixed pnpm version conflicts in workflows
+   - Updated to use packageManager field from package.json (pnpm@10.14.0)
+   - Simplified action setup to avoid version mismatch errors
 
 ---
 
