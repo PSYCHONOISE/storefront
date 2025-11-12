@@ -46,6 +46,8 @@ function setCookie(
 }
 
 export async function find(checkoutId: string) {
+	if (!browser) return null;
+	
 	try {
 		const { checkout } = checkoutId
 			? await executeGraphQL(CheckoutFindDocument, {
@@ -63,6 +65,8 @@ export async function find(checkoutId: string) {
 }
 
 export async function findOrCreate({ channel, checkoutId }: { checkoutId?: string; channel: string }) {
+	if (!browser) return null;
+	
 	if (!checkoutId) {
 		return (await create({ channel })).checkoutCreate?.checkout;
 	}
@@ -70,5 +74,7 @@ export async function findOrCreate({ channel, checkoutId }: { checkoutId?: strin
 	return checkout || (await create({ channel })).checkoutCreate?.checkout;
 }
 
-export const create = ({ channel }: { channel: string }) =>
-	executeGraphQL(CheckoutCreateDocument, { cache: "no-cache", variables: { channel } });
+export const create = ({ channel }: { channel: string }) => {
+	if (!browser) return Promise.resolve({ checkoutCreate: { checkout: null } });
+	return executeGraphQL(CheckoutCreateDocument, { cache: "no-cache", variables: { channel } });
+};

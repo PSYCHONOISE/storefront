@@ -1,4 +1,5 @@
 import { writable, derived, get } from "svelte/store";
+import { browser } from "$app/environment";
 import type { ProductListItemFragment, PageInfo } from "@gql";
 import { ProductListPaginatedDocument } from "@gql/graphql";
 import { executeGraphQL } from "@lib/graphql";
@@ -60,8 +61,8 @@ export function initializeProducts(
 		prefetchedPages: new Map(),
 	}));
 
-	// Start prefetching the next page immediately
-	if (initialPageInfo?.hasNextPage) {
+	// Start prefetching the next page immediately (only in browser)
+	if (browser && initialPageInfo?.hasNextPage) {
 		setTimeout(() => {
 			prefetchNextPages();
 		}, 500); // Small delay to not block initial render
@@ -72,6 +73,8 @@ export function initializeProducts(
  * Load more products and append to existing list
  */
 export async function loadMoreProducts(): Promise<boolean> {
+	if (!browser) return false;
+	
 	const currentState = get(productsStore);
 
 	if (!currentState.pageInfo?.hasNextPage || currentState.isLoadingMore) {
@@ -139,6 +142,8 @@ export async function loadMoreProducts(): Promise<boolean> {
  * Prefetch next pages in background
  */
 export async function prefetchNextPages() {
+	if (!browser) return;
+	
 	const currentState = get(productsStore);
 
 	if (!currentState.pageInfo?.hasNextPage) return;
@@ -241,6 +246,8 @@ async function fetchProductPage(after?: string | null): Promise<{
  * Handle scroll events to trigger intelligent prefetching
  */
 export function handleScroll() {
+	if (!browser) return;
+	
 	const scrollTop = window.scrollY;
 	const windowHeight = window.innerHeight;
 	const documentHeight = document.documentElement.scrollHeight;
