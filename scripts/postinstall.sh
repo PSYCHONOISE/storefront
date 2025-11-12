@@ -38,6 +38,16 @@ if [ -d "src" ] && [ -n "$PUBLIC_SALEOR_API_URL" ] && [ "$PUBLIC_SALEOR_API_URL"
     else
         npm run generate
     fi
+    
+    # 5. Fix GraphQL index.ts to export all types
+    echo "🔧 Fixing GraphQL index.ts exports..."
+    if [ -f "src/gql/index.ts" ] && [ -f "src/gql/graphql.ts" ]; then
+        # Check if graphql.ts export is missing and add it
+        if ! grep -q "export \* from \"./graphql\"" src/gql/index.ts; then
+            echo 'export * from "./graphql";' >> src/gql/index.ts
+            echo "   Added graphql.ts export to index.ts"
+        fi
+    fi
 else
     if [ ! -d "src" ]; then
         echo "⚠️  src directory not found - skipping GraphQL codegen (Docker build stage)"

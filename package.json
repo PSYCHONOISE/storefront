@@ -11,7 +11,7 @@
 		"start": "node build/index.js",
 		"predev": "svelte-kit sync && ./scripts/generate.sh",
 		"prebuild": "svelte-kit sync && ./scripts/generate.sh",
-		"generate": "graphql-codegen --config .graphqlrc.ts",
+		"generate": "graphql-codegen --config .graphqlrc.ts && echo 'export * from \"./graphql\";' >> src/gql/index.ts",
 		"generate:clean": "npm config set verify-deps-before-run false && npm config set _jsr-registry '' && graphql-codegen --config .graphqlrc.ts",
 		"sync": "svelte-kit sync",
 		"setup": "svelte-kit sync && pnpm run generate",
