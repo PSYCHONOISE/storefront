@@ -37,14 +37,14 @@ COPY .env.test .env
 # Генерируем GraphQL типы
 RUN pnpm run generate
 
-# Устанавливаем Docker конфигурацию и собираем приложение
-RUN cp svelte.config.docker.js svelte.config.js && pnpm run build:test
+# Собираем приложение для тестов (build:test уже использует правильный конфиг)
+RUN pnpm run build:test
 
 # Финальный stage для запуска тестов
 FROM dependencies AS test
 
-# Копируем собранное приложение (Node адаптер создаёт папку build)
-COPY --from=build-stage /app/build ./build/
+# Копируем собранное приложение для тестов (build:test создаёт папку build-test)
+COPY --from=build-stage /app/build-test ./build/
 COPY --from=build-stage /app/.svelte-kit ./.svelte-kit/
 COPY --from=build-stage /app/src ./src/
 COPY --from=build-stage /app/__tests__ ./__tests__/
