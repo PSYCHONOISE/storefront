@@ -67,7 +67,11 @@ case $ENV in
         # Direct execution to avoid npm wrapper issues  
         echo "Server PID: $$"
         if [ -f "build-production/index.js" ]; then
-            exec npx dotenv-cli -e .env.production -- node build-production/index.js
+            # Load environment variables directly and export them
+            set -a
+            source .env.production
+            set +a
+            exec node build-production/index.js
         else
             echo "❌ Production build not found. Run: ./dev.sh build production"
             exit 1
@@ -77,7 +81,11 @@ case $ENV in
         # Direct execution to avoid npm wrapper issues
         echo "Server PID: $$"
         if [ -f "build-test/index.js" ]; then
-            exec npx dotenv-cli -e .env.test -- node build-test/index.js
+            # Load environment variables directly and export them
+            set -a
+            source .env.test
+            set +a
+            exec node build-test/index.js
         else
             echo "❌ Test build not found. Run: ./dev.sh build test"
             exit 1
