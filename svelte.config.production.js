@@ -11,7 +11,6 @@ const config = {
 		adapter: adapter({
 			out: "build-production",
 			precompress: false,
-			envPrefix: "",
 		}),
 		alias: {
 			"@": "./src",
