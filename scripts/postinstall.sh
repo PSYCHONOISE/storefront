@@ -3,10 +3,34 @@ set -e
 
 echo "🔄 Running postinstall setup..."
 
+# Check Node.js version compatibility
+NODE_VERSION=$(node --version | cut -d'v' -f2 | cut -d'.' -f1 2>/dev/null || echo "0")
+NODE_MAJOR_VERSION=${NODE_VERSION:-0}
+
 # Skip complex setup during Docker build
 if [ "$DOCKER_BUILD" = "true" ]; then
     echo "🐳 Docker build detected - skipping complex postinstall steps"
     echo "✅ Postinstall setup completed (Docker mode)!"
+    exit 0
+fi
+
+# Skip SvelteKit operations if Node.js < 22 (due to styleText dependency)
+if [ "$NODE_MAJOR_VERSION" -lt 22 ]; then
+    echo "⚠️  Node.js $NODE_MAJOR_VERSION detected - some operations require Node.js 22+"
+    echo "💡 Creating minimal setup for development compatibility..."
+    
+    # Create basic directory structure only
+    if [ -d "src" ]; then
+        mkdir -p src/gql
+        if [ ! -f "src/gql/index.ts" ]; then
+            echo '// Auto-generated GraphQL types will be exported from here
+// This file is created during postinstall to prevent import errors during SSR
+export {};' > src/gql/index.ts
+        fi
+    fi
+    
+    echo "✅ Minimal postinstall setup completed!"
+    echo "💡 For full functionality, please use Node.js 22+ in your development environment"
     exit 0
 fi
 

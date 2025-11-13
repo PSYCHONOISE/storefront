@@ -60,9 +60,10 @@ COPY --from=build-stage /app/start-tests.sh ./start-tests.sh
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 sveltekit
 
-# Создаем директории для результатов тестов и устанавливаем права
+# Создаем директории для результатов тестов с полными правами
 RUN mkdir -p test-results playwright-report && \
     chmod +x /app/start-tests.sh && \
+    chmod -R 777 test-results playwright-report && \
     chown -R sveltekit:nodejs /app
 
 USER sveltekit

@@ -7,15 +7,17 @@ set -e
 COMMAND=${1:-help}
 ENV=${2:-development}
 
-# Check Node.js version requirement
-NODE_VERSION=$(node --version | cut -d'v' -f2 | cut -d'.' -f1)
-if [ "$NODE_VERSION" -lt 22 ]; then
-    echo "⚠️  Node.js version $NODE_VERSION detected. This project requires Node.js 22+"
-    echo "💡 Please update Node.js or use nvm:"
-    echo "   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash"
-    echo "   nvm install 22"
-    echo "   nvm use 22"
-    exit 1
+# Check Node.js version requirement (skip for Docker commands)
+if [ "$COMMAND" != "docker" ]; then
+    NODE_VERSION=$(node --version | cut -d'v' -f2 | cut -d'.' -f1)
+    if [ "$NODE_VERSION" -lt 22 ]; then
+        echo "⚠️  Node.js version $NODE_VERSION detected. This project requires Node.js 22+"
+        echo "💡 Please update Node.js or use nvm:"
+        echo "   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash"
+        echo "   nvm install 22"
+        echo "   nvm use 22"
+        exit 1
+    fi
 fi
 
 # Detect available package manager with preference for pnpm

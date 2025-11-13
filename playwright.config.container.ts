@@ -18,11 +18,12 @@ const baseURL = process.env.BASE_URL || `http://localhost:${PORT}`;
 // Конфигурация для тестирования в контейнере (без веб-сервера)
 const testConfig = {
 	testDir: "./__tests__",
+	outputDir: "./test-results", // Явно указываем директорию для результатов
 	fullyParallel: true,
 	workers: 1, // Один воркер для стабильности в контейнере
 	forbidOnly: true,
 	retries: 1,
-	reporter: [["html"], ["list"]],
+	reporter: [["html", { outputFolder: "./playwright-report" }], ["list"]],
 	timeout: 90 * 1000, // 90 секунд
 	globalTimeout: 10 * 60 * 1000, // 10 минут
 
