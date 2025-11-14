@@ -81,7 +81,7 @@
 		"@playwright/test": "1.56.1",
 		"@sveltejs/adapter-node": "5.4.0",
 		"@sveltejs/adapter-vercel": "6.1.1",
-		"@sveltejs/vite-plugin-svelte": "^6.1.4",
+		"@sveltejs/vite-plugin-svelte": "6.1.4",
 		"@types/lodash-es": "4.17.12",
 		"@types/node": "24.10.1",
 		"autoprefixer": "10.4.22",
