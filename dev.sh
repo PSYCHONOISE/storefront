@@ -7,6 +7,19 @@ set -e
 COMMAND=${1:-help}
 ENV=${2:-development}
 
+# Check Node.js version requirement (skip for Docker commands)
+if [ "$COMMAND" != "docker" ]; then
+    NODE_VERSION=$(node --version | cut -d'v' -f2 | cut -d'.' -f1)
+    if [ "$NODE_VERSION" -lt 22 ]; then
+        echo "⚠️  Node.js version $NODE_VERSION detected. This project requires Node.js 22+"
+        echo "💡 Please update Node.js or use nvm:"
+        echo "   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash"
+        echo "   nvm install 22"
+        echo "   nvm use 22"
+        exit 1
+    fi
+fi
+
 # Detect available package manager with preference for pnpm
 # First try to enable pnpm via corepack if available
 if command -v corepack > /dev/null 2>&1; then
@@ -88,7 +101,7 @@ start_local() {
             ;;
         test)
             echo "🧪 Test mode for testing environment (port 3002)"
-            $PKG_EXEC $DOTENV_CMD -e .env.test -- $PKG_MANAGER run build && ./scripts/start-clean.sh test
+            $PKG_MANAGER run build:test && ./scripts/start-clean.sh test
             ;;
         *)
             echo "❌ Unknown environment: $ENV"

@@ -9,8 +9,8 @@ echo "🚀 Starting $ENV server (simple mode)"
 
 case $ENV in
     development)
-        echo "Command: npx dotenv-cli -e .env.development -- vite dev --port 3000"
-        npx dotenv-cli -e .env.development -- vite dev --port 3000
+        echo "Command: npx dotenv-cli -e .env.development -- vite dev"
+        npx dotenv-cli -e .env.development -- vite dev
         ;;
     production)
         echo "Command: npx dotenv-cli -e .env.production -- node build/index.js"

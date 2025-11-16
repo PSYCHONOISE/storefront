@@ -27,7 +27,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: package.json
+          node-version: "22"
           cache: "pnpm"
 
       - name: Install dependencies
@@ -58,7 +58,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: package.json
+          node-version: "22"
           cache: "pnpm"
 
       - name: Install dependencies
@@ -100,7 +100,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: package.json
+          node-version: "22"
           cache: "pnpm"
 
       - name: Install dependencies
@@ -154,3 +154,6 @@ jobs:
           tags: saleor-storefront:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            PUBLIC_SALEOR_API_URL=https://rozario.eu.saleor.cloud/graphql/
+            PUBLIC_STOREFRONT_URL=https://example.com

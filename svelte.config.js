@@ -9,9 +9,11 @@ const config = {
 
 	kit: {
 		adapter: adapter({
-			out: "build",
+			out: "build", // development использует обычную директорию
 			precompress: false,
 		}),
+		// Изоляция кеша SvelteKit для development (по умолчанию)
+		outDir: ".svelte-kit",
 		alias: {
 			"@": "./src",
 			"@lib": "./src/lib",

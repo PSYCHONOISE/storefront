@@ -10,8 +10,8 @@
 		"preview": "vite preview",
 		"start": "node build/index.js",
 		"predev": "svelte-kit sync && ./scripts/generate.sh",
-		"prebuild": "svelte-kit sync && ./scripts/generate.sh",
-		"generate": "graphql-codegen --config .graphqlrc.ts",
+		"prebuild": "svelte-kit sync && pnpm run generate",
+		"generate": "graphql-codegen --config .graphqlrc.ts && echo 'export * from \"./graphql\";' >> src/gql/index.ts",
 		"generate:clean": "npm config set verify-deps-before-run false && npm config set _jsr-registry '' && graphql-codegen --config .graphqlrc.ts",
 		"sync": "svelte-kit sync",
 		"setup": "svelte-kit sync && pnpm run generate",
@@ -23,7 +23,7 @@
 		"start:dev": "npx dotenv-cli -e .env.development -- npm --silent run dev",
 		"start:prod": "npx dotenv-cli -e .env.production -- npm --silent run start",
 		"start:test": "npx dotenv-cli -e .env.test -- npm --silent run start",
-		"serve:dev": "npx dotenv-cli -e .env.development -- vite dev --port 3000",
+		"serve:dev": "npx dotenv-cli -e .env.development -- vite dev",
 		"serve:prod": "npx dotenv-cli -e .env.production -- node build-production/index.js",
 		"serve:test": "npx dotenv-cli -e .env.test -- node build-test/index.js",
 		"install:browsers": "pnpm exec playwright install",
@@ -50,14 +50,14 @@
 	"dependencies": {
 		"@adyen/adyen-web": "6.25.1",
 		"@adyen/api-library": "30.0.0",
-		"@esbuild/linux-x64": "0.25.9",
+		"@esbuild/linux-x64": "0.25.12",
 		"@rollup/rollup-linux-x64-gnu": "^4.53.2",
 		"@saleor/auth-sdk": "1.0.3",
-		"@stripe/stripe-js": "7.9.0",
+		"@stripe/stripe-js": "8.4.0",
 		"@sveltejs/kit": "^2.48.4",
 		"@tailwindcss/container-queries": "^0.1.1",
 		"@tailwindcss/forms": "^0.5.10",
-		"@tailwindcss/typography": "^0.5.16",
+		"@tailwindcss/typography": "^0.5.19",
 		"clsx": "2.1.1",
 		"dotenv": "17.2.3",
 		"editorjs-html": "4.0.5",
@@ -81,9 +81,9 @@
 		"@playwright/test": "1.56.1",
 		"@sveltejs/adapter-node": "5.4.0",
 		"@sveltejs/adapter-vercel": "6.1.1",
-		"@sveltejs/vite-plugin-svelte": "^6.1.4",
+		"@sveltejs/vite-plugin-svelte": "6.1.4",
 		"@types/lodash-es": "4.17.12",
-		"@types/node": "24.10.0",
+		"@types/node": "24.10.1",
 		"autoprefixer": "10.4.22",
 		"dotenv-cli": "11.0.0",
 		"graphql-tag": "2.12.6",
@@ -96,7 +96,7 @@
 		"prettier-plugin-tailwindcss": "0.7.1",
 		"schema-dts": "1.1.5",
 		"svelte": "^5.0.0",
-		"svelte-check": "^4.3.3",
+		"svelte-check": "^4.3.4",
 		"typescript": "5.9.3",
 		"vite": "^7.1.4",
 		"wonka": "6.3.5"
@@ -107,7 +107,7 @@
 	"packageManager": "pnpm@10.14.0",
 	"engines": {
 		"pnpm": ">=10.14.0",
-		"node": ">=20"
+		"node": ">=22"
 	},
 	"scripts-info": {
 		"package-managers": "This project supports pnpm (recommended), npm, and yarn. Use the package manager of your choice."

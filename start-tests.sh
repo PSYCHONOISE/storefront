@@ -17,6 +17,10 @@ done
 echo
 
 echo "Запуск тестов..."
+# Проверяем и создаем директории для результатов тестов с полными правами
+mkdir -p test-results playwright-report
+chmod -R 777 test-results playwright-report 2>/dev/null || true
+echo "Права на test-results: $(ls -ld test-results)"
 # Используем специальную конфигурацию для контейнера
 BASE_URL=http://localhost:3000 pnpm exec playwright test --config=playwright.config.container.ts
 TEST_EXIT_CODE=$?

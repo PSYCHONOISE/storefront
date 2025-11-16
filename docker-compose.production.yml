@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile.sveltekit
     environment:
       - NODE_ENV=production
-      - PUBLIC_SALEOR_API_URL=${PUBLIC_SALEOR_API_URL:-https://store-qdjgu50o.eu.saleor.cloud/graphql/}
+      - PUBLIC_SALEOR_API_URL=${PUBLIC_SALEOR_API_URL:-https://rozario.eu.saleor.cloud/graphql/}
       - PUBLIC_STOREFRONT_URL=${PUBLIC_STOREFRONT_URL}
       - DEBUG=false
     restart: always

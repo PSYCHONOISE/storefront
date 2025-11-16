@@ -47,4 +47,6 @@ next-env.d.ts
 
 # SvelteKit
 .svelte-kit
+.svelte-kit-*
+.vite-cache-*
 sveltekit-version

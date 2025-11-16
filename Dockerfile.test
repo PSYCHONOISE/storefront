@@ -1,10 +1,10 @@
 # Multi-stage Dockerfile для тестирования
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
 
 # Устанавливаем pnpm, git и системные зависимости для Playwright
 RUN corepack enable pnpm && \
     corepack install -g pnpm@10.14.0 && \
-    apk add --no-cache git wget chromium nss freetype freetype-dev harfbuzz ca-certificates ttf-freefont
+    apk add --no-cache git wget bash chromium nss freetype freetype-dev harfbuzz ca-certificates ttf-freefont
 
 # Устанавливаем переменные среды для Playwright
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
@@ -18,8 +18,11 @@ FROM base AS dependencies
 
 # Копируем файлы конфигурации пакетов
 COPY package.json pnpm-lock.yaml ./
+COPY scripts/ ./scripts/
+RUN chmod +x ./scripts/*.sh
 
-# Устанавливаем все зависимости включая dev dependencies
+# Set Docker build flag and install all dependencies including dev dependencies
+ENV DOCKER_BUILD=true
 RUN pnpm install --frozen-lockfile
 
 # Stage для сборки приложения
@@ -34,14 +37,14 @@ COPY .env.test .env
 # Генерируем GraphQL типы
 RUN pnpm run generate
 
-# Устанавливаем Docker конфигурацию и собираем приложение
-RUN cp svelte.config.docker.js svelte.config.js && pnpm run build:test
+# Собираем приложение для тестов (build:test уже использует правильный конфиг)
+RUN pnpm run build:test
 
 # Финальный stage для запуска тестов
 FROM dependencies AS test
 
-# Копируем собранное приложение (Node адаптер создаёт папку build)
-COPY --from=build-stage /app/build ./build/
+# Копируем собранное приложение для тестов (build:test создаёт папку build-test)
+COPY --from=build-stage /app/build-test ./build/
 COPY --from=build-stage /app/.svelte-kit ./.svelte-kit/
 COPY --from=build-stage /app/src ./src/
 COPY --from=build-stage /app/__tests__ ./__tests__/
@@ -53,16 +56,12 @@ COPY --from=build-stage /app/package.json ./
 COPY --from=build-stage /app/svelte.config.js ./
 COPY --from=build-stage /app/start-tests.sh ./start-tests.sh
 
-# Создаем non-root пользователя
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 sveltekit
-
-# Создаем директории для результатов тестов и устанавливаем права
+# Создаём директории для тестов с полными правами (запуск как root)
 RUN mkdir -p test-results playwright-report && \
     chmod +x /app/start-tests.sh && \
-    chown -R sveltekit:nodejs /app
+    chmod -R 777 test-results playwright-report
 
-USER sveltekit
+# Оставаемся под root для тестов (полные права)
 
 # Экспонируем порт
 EXPOSE 3000

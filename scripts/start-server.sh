@@ -24,15 +24,15 @@ trap cleanup INT TERM
 case $ENV in
     development)
         # Development with hot reload
-        PORT=3000 npx dotenv-cli -e .env.development -- npm run dev 2>&1 | sed 's/^.*ELIFECYCLE.*$//' | grep -v "Command failed" || true
+        npx dotenv-cli -e .env.development -- npm run dev 2>&1 | sed 's/^.*ELIFECYCLE.*$//' | grep -v "Command failed" || true
         ;;
     production)
         # Production server
-        PORT=3001 npx dotenv-cli -e .env.production -- npm run start 2>&1 | sed 's/^.*ELIFECYCLE.*$//' | grep -v "Command failed" || true
+        npx dotenv-cli -e .env.production -- npm run start 2>&1 | sed 's/^.*ELIFECYCLE.*$//' | grep -v "Command failed" || true
         ;;
     test)
         # Test server
-        PORT=3002 npx dotenv-cli -e .env.test -- npm run start 2>&1 | sed 's/^.*ELIFECYCLE.*$//' | grep -v "Command failed" || true
+        npx dotenv-cli -e .env.test -- npm run start 2>&1 | sed 's/^.*ELIFECYCLE.*$//' | grep -v "Command failed" || true
         ;;
     *)
         echo "❌ Unknown environment: $ENV"

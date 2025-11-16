@@ -50,6 +50,9 @@ const graphqlConfig: CodegenConfig = {
 			},
 			presetConfig: {
 				fragmentMasking: false,
+				gqlTagName: "gql",
+				gqlFileName: "gql",
+				indexFileName: "index"
 			},
 		},
 	},

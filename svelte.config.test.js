@@ -12,6 +12,8 @@ const config = {
 			out: "build-test",
 			precompress: false,
 		}),
+		// Изоляция кеша SvelteKit для test
+		outDir: ".svelte-kit-test",
 		alias: {
 			"@": "./src",
 			"@lib": "./src/lib",

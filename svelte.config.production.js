@@ -12,6 +12,8 @@ const config = {
 			out: "build-production",
 			precompress: false,
 		}),
+		// Изоляция кеша SvelteKit для production
+		outDir: ".svelte-kit-production",
 		alias: {
 			"@": "./src",
 			"@lib": "./src/lib",

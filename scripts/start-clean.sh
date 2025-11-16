@@ -61,7 +61,7 @@ echo "💡 Press Ctrl+C once to stop (double Ctrl+C to force)"
 case $ENV in
     development)
         # Use exec to replace shell process, avoiding extra process layer
-        exec npx dotenv-cli -e .env.development -- node_modules/.bin/vite dev --port 3000
+        exec npx dotenv-cli -e .env.development -- node_modules/.bin/vite dev
         ;;
     production)
         # Direct execution to avoid npm wrapper issues  
