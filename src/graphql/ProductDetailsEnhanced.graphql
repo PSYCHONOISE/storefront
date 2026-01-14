@@ -1,0 +1,98 @@
+query ProductDetailsEnhanced($slug: String!, $channel: String!) {
+	product(slug: $slug, channel: $channel) {
+		id
+		name
+		slug
+		description
+		descriptionJson
+		seoTitle
+		seoDescription
+		thumbnail(size: 1024, format: WEBP) {
+			url
+			alt
+		}
+		# Product images/media
+		media {
+			id
+			url(size: 1024, format: WEBP)
+			alt
+			type
+		}
+		category {
+			id
+			name
+			slug
+		}
+		collections {
+			id
+			name
+			slug
+		}
+		# Enhanced variants with full details
+		variants {
+			...VariantDetailsEnhanced
+		}
+		pricing {
+			priceRange {
+				start {
+					gross {
+						amount
+						currency
+					}
+				}
+				stop {
+					gross {
+						amount
+						currency
+					}
+				}
+			}
+			onSale
+		}
+		# Product attributes (custom fields)
+		attributes {
+			attribute {
+				id
+				name
+				slug
+				type
+				inputType
+				unit
+			}
+			values {
+				id
+				name
+				value
+				slug
+				# For file/image attributes
+				file {
+					url
+					contentType
+				}
+				# For rich text attributes
+				richText
+				# For date attributes
+				date
+				# For datetime attributes
+				dateTime
+			}
+		}
+		# Metadata for additional custom data
+		metadata {
+			key
+			value
+		}
+		privateMetadata {
+			key
+			value
+		}
+		# Availability and stock info
+		availableForPurchase
+		isAvailableForPurchase
+		# Weight and dimensions
+		weight {
+			unit
+			value
+		}
+	}
+}

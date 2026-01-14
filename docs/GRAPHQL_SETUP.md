@@ -40,23 +40,25 @@ pnpm run generate            # Generates GraphQL types
 
 ```json
 {
-  "scripts": {
-    "postinstall": "./scripts/postinstall.sh",  // Automatic setup
-    "setup": "svelte-kit sync && pnpm run generate", // Manual setup
-    "sync": "svelte-kit sync",                       // Just SvelteKit sync
-    "generate": "graphql-codegen --config .graphqlrc.ts" // Just GraphQL codegen
-  }
+	"scripts": {
+		"postinstall": "./scripts/postinstall.sh", // Automatic setup
+		"setup": "svelte-kit sync && pnpm run generate", // Manual setup
+		"sync": "svelte-kit sync", // Just SvelteKit sync
+		"generate": "graphql-codegen --config .graphqlrc.ts" // Just GraphQL codegen
+	}
 }
 ```
 
 ### Development Workflow
 
 1. **First time setup**:
+
    ```bash
    npm install  # postinstall runs automatically
    ```
 
 2. **After adding new GraphQL queries**:
+
    ```bash
    pnpm run generate
    ```
@@ -76,6 +78,7 @@ pnpm run generate            # Generates GraphQL types
 ### Environment Variables
 
 GraphQL codegen requires:
+
 ```bash
 PUBLIC_SALEOR_API_URL=https://your-saleor-api.com/graphql/
 ```
@@ -85,6 +88,7 @@ If this is not set, postinstall will skip codegen but still create placeholder t
 ### Docker Considerations
 
 In Docker environments, make sure:
+
 1. Environment variables are available during build
 2. Network access to Saleor API during build (if running codegen)
 3. `postinstall` script has execute permissions

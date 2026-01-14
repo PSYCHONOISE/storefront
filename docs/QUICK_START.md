@@ -67,12 +67,12 @@ PUBLIC_STOREFRONT_URL=http://localhost:3000
 
 📝 **Подробную документацию см. в [DEPLOYMENT.md](./DEPLOYMENT.md)**
 
-
 ---
 
 ## ⚠️ Частые проблемы и решения
 
 ### "During SSR, Vite can't find the '@gql'"
+
 ```bash
 # Автоматическое исправление после npm install
 # Либо вручную:
@@ -80,6 +80,7 @@ pnpm run setup
 ```
 
 ### "Port 3000 already in use"
+
 ```bash
 # Остановить работающие контейнеры
 ./dev.sh stop development

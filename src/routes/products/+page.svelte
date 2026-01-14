@@ -2,6 +2,7 @@
 	import type { PageData } from "./$types";
 	import ProductList from "@components/ProductList.svelte";
 	import LoadingSpinner from "@components/LoadingSpinner.svelte";
+	import ChannelSelector from "@components/ChannelSelector.svelte";
 	import { onMount, onDestroy } from "svelte";
 	import { 
 		initializeProducts, 
@@ -13,7 +14,9 @@
 		isLoadingMore,
 		productsError
 	} from "@stores/products";
+	import { currentChannel, availableChannels } from "@stores/channels";
 	import { createScrollObserver, throttle } from "@lib/utils/intersection-observer";
+	import { goto } from "$app/navigation";
 
 	let { data }: { data: PageData } = $props();
 	let containerElement: HTMLElement;
@@ -42,6 +45,14 @@
 		};
 	});
 	
+	// Handle channel changes - reload the page with new channel
+	$effect(() => {
+		if ($currentChannel && $currentChannel !== (data.channel || 'default-channel')) {
+			// Reload the page with the new channel
+			goto(`/products?channel=${$currentChannel}`, { replaceState: false });
+		}
+	});
+	
 	onDestroy(() => {
 		resetProducts();
 	});
@@ -57,7 +68,22 @@
 </svelte:head>
 
 <div class="mx-auto max-w-7xl px-4 py-8" bind:this={containerElement}>
-	<h1 class="mb-8 text-3xl font-bold">All Products</h1>
+	<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+		<div>
+			<h1 class="text-3xl font-bold">All Products</h1>
+			{#if $availableChannels.length > 1}
+				<p class="mt-2 text-sm text-gray-600">
+					Showing products from: 
+					<span class="font-medium">
+						{$availableChannels.find(ch => ch.slug === $currentChannel)?.name || $currentChannel}
+					</span>
+				</p>
+			{/if}
+		</div>
+		{#if $availableChannels.length > 1}
+			<ChannelSelector variant="dropdown" className="sm:w-auto" />
+		{/if}
+	</div>
 
 	{#if data.error}
 		<div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">

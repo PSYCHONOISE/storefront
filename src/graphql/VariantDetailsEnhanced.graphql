@@ -1,0 +1,52 @@
+fragment VariantDetailsEnhanced on ProductVariant {
+	id
+	name
+	sku
+	quantityAvailable
+	pricing {
+		price {
+			gross {
+				currency
+				amount
+			}
+		}
+		onSale
+	}
+	# Variant attributes (size, color, etc.)
+	attributes {
+		attribute {
+			id
+			name
+			slug
+			type
+			inputType
+		}
+		values {
+			id
+			name
+			value
+			slug
+			# Color/image attributes
+			file {
+				url
+				contentType
+			}
+		}
+	}
+	# Variant metadata
+	metadata {
+		key
+		value
+	}
+	privateMetadata {
+		key
+		value
+	}
+	# Images specific to this variant
+	media {
+		id
+		url(size: 1024, format: WEBP)
+		alt
+		type
+	}
+}

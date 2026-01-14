@@ -1,0 +1,81 @@
+fragment ProductListItemEnhanced on Product {
+	id
+	name
+	slug
+	pricing {
+		priceRange {
+			start {
+				gross {
+					amount
+					currency
+				}
+			}
+			stop {
+				gross {
+					amount
+					currency
+				}
+			}
+		}
+	}
+	category {
+		id
+		name
+	}
+	thumbnail(size: 1024, format: WEBP) {
+		url
+		alt
+	}
+	# Enhanced: Include variants count and availability
+	variantCount: variants {
+		id
+		name
+		quantityAvailable
+		pricing {
+			price {
+				gross {
+					amount
+					currency
+				}
+			}
+		}
+		# Variant attributes for options like size, color, etc.
+		attributes {
+			attribute {
+				id
+				name
+				slug
+			}
+			values {
+				id
+				name
+				value
+				slug
+			}
+		}
+	}
+	# Product attributes (custom fields)
+	attributes {
+		attribute {
+			id
+			name
+			slug
+			type
+		}
+		values {
+			id
+			name
+			value
+			slug
+		}
+	}
+	# Metadata for additional custom fields
+	metadata {
+		key
+		value
+	}
+	privateMetadata {
+		key
+		value
+	}
+}

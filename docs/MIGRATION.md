@@ -105,22 +105,18 @@ pnpm run preview
 ## Key Differences from Next.js
 
 1. **File Naming**:
-
    - `+page.svelte` instead of `page.tsx`
    - `+layout.svelte` instead of `layout.tsx`
    - `+page.ts` for data loading instead of React Server Components
 
 2. **Data Loading**:
-
    - SvelteKit's `load` functions instead of Next.js server components
    - No built-in data fetching caching (need to implement manually)
 
 3. **Environment Variables**:
-
    - `PUBLIC_*` prefix for client-side variables instead of `NEXT_PUBLIC_*`
 
 4. **Component Syntax**:
-
    - Svelte's reactive syntax instead of React hooks
    - `$props()` and `$derived()` instead of `useState()` and `useEffect()`
 

@@ -4,18 +4,19 @@
 
 ## Настроенные алиасы
 
-| Алиас | Путь | Описание |
-|-------|------|----------|
-| `@` | `./src` | Корневая директория исходного кода |
-| `@lib` | `./src/lib` | Библиотеки и утилиты |
-| `@components` | `./src/lib/components` | Svelte компоненты |
-| `@stores` | `./src/lib/stores` | Svelte stores (состояние приложения) |
-| `@gql` | `./src/gql` | Генерированные GraphQL типы |
-| `@graphql` | `./src/graphql` | GraphQL схемы и запросы |
+| Алиас         | Путь                   | Описание                             |
+| ------------- | ---------------------- | ------------------------------------ |
+| `@`           | `./src`                | Корневая директория исходного кода   |
+| `@lib`        | `./src/lib`            | Библиотеки и утилиты                 |
+| `@components` | `./src/lib/components` | Svelte компоненты                    |
+| `@stores`     | `./src/lib/stores`     | Svelte stores (состояние приложения) |
+| `@gql`        | `./src/gql`            | Генерированные GraphQL типы          |
+| `@graphql`    | `./src/graphql`        | GraphQL схемы и запросы              |
 
 ## Примеры использования
 
 ### До настройки path mapping:
+
 ```typescript
 // Длинные относительные пути
 import { cartStore } from "../../lib/stores/cart";
@@ -25,6 +26,7 @@ import { executeGraphQL } from "../../../lib/graphql";
 ```
 
 ### После настройки path mapping:
+
 ```typescript
 // Чистые и понятные импорты
 import { cartStore } from "@stores/cart";
@@ -38,6 +40,7 @@ import { executeGraphQL } from "@lib/graphql";
 Path mapping настроен в следующих файлах:
 
 ### 1. SvelteKit конфигурация
+
 - `svelte.config.js`
 - `svelte.config.docker.js`
 - `svelte.config.local.js`
@@ -56,6 +59,7 @@ kit: {
 ```
 
 ### 2. Vite конфигурация
+
 - `vite.config.ts`
 
 ```typescript
@@ -113,6 +117,7 @@ src/
 ## Добавление новых алиасов
 
 Для добавления нового алиаса обновите конфигурацию в:
+
 1. `svelte.config.js` (и его варианты)
 2. `vite.config.ts`
 

@@ -1,0 +1,17 @@
+query ProductListEnhanced($first: Int, $after: String, $channel: String!) {
+	products(first: $first, after: $after, channel: $channel) {
+		edges {
+			node {
+				...ProductListItemEnhanced
+			}
+			cursor
+		}
+		pageInfo {
+			hasNextPage
+			hasPreviousPage
+			startCursor
+			endCursor
+		}
+		totalCount
+	}
+}

@@ -1,14 +1,16 @@
 {
 	"buildCommand": "pnpm run vercel:build",
 	"framework": "sveltekit",
-	"installCommand": "pnpm install",
+	"installCommand": "pnpm install --frozen-lockfile",
 	"env": {
-		"NODE_ENV": "production"
+		"NODE_ENV": "production",
+		"VERCEL": "1"
 	},
 	"build": {
 		"env": {
 			"NODE_ENV": "production",
-			"GRAPHQL_INTROSPECTION": "false"
+			"GRAPHQL_INTROSPECTION": "false",
+			"VERCEL": "1"
 		}
 	}
 }

@@ -61,31 +61,50 @@ else
     echo "⚠️  src directory not found - skipping gql directory creation (Docker build stage)"
 fi
 
-# 4. Run GraphQL codegen if API URL is available and we have source files
-if [ -d "src" ] && [ -n "$PUBLIC_SALEOR_API_URL" ] && [ "$PUBLIC_SALEOR_API_URL" != "" ]; then
-    echo "🔄 Running GraphQL codegen..."
-    if command -v pnpm > /dev/null 2>&1; then
-        pnpm run generate
-    else
-        npm run generate
-    fi
-    
-    # 5. Fix GraphQL index.ts to export all types
-    echo "🔧 Fixing GraphQL index.ts exports..."
-    if [ -f "src/gql/index.ts" ] && [ -f "src/gql/graphql.ts" ]; then
-        # Check if graphql.ts export is missing and add it
-        if ! grep -q "export \* from \"./graphql\"" src/gql/index.ts; then
-            echo 'export * from "./graphql";' >> src/gql/index.ts
-            echo "   Added graphql.ts export to index.ts"
-        fi
-    fi
+# 4. Skip GraphQL codegen on Vercel build to avoid timeout issues
+if [ "$VERCEL" = "1" ] || [ "$CI" = "true" ]; then
+    echo "🚀 Vercel/CI build detected - skipping GraphQL codegen"
+    echo "   GraphQL types will be generated during build step"
 else
-    if [ ! -d "src" ]; then
-        echo "⚠️  src directory not found - skipping GraphQL codegen (Docker build stage)"
+    # Run GraphQL codegen if API URL is available and we have source files
+    if [ -d "src" ] && [ -n "$PUBLIC_SALEOR_API_URL" ] && [ "$PUBLIC_SALEOR_API_URL" != "" ]; then
+        echo "🔄 Running GraphQL codegen..."
+        if command -v pnpm > /dev/null 2>&1; then
+            timeout 30 pnpm run generate || {
+                echo "⚠️  GraphQL codegen timed out - will run during build"
+            }
+        else
+            timeout 30 npm run generate || {
+                echo "⚠️  GraphQL codegen timed out - will run during build"
+            }
+        fi
+        
+        # 5. Fix GraphQL index.ts to export all types (if generated successfully)
+        if [ -f "src/gql/graphql.ts" ]; then
+            echo "🔧 Fixing GraphQL index.ts exports..."
+            if [ -f "src/gql/index.ts" ]; then
+                # Check if graphql.ts export is missing and add it
+                if ! grep -q "export \* from \"./graphql\"" src/gql/index.ts; then
+                    echo 'export * from "./graphql";' >> src/gql/index.ts
+                    echo "   Added graphql.ts export to index.ts"
+                fi
+            fi
+        fi
     else
-        echo "⚠️  PUBLIC_SALEOR_API_URL not set - skipping GraphQL codegen"
-        echo "   Run 'npm run generate' after setting up your environment"
+        if [ ! -d "src" ]; then
+            echo "⚠️  src directory not found - skipping GraphQL codegen (Docker build stage)"
+        else
+            echo "⚠️  PUBLIC_SALEOR_API_URL not set - skipping GraphQL codegen"
+            echo "   Run 'npm run generate' after setting up your environment"
+        fi
     fi
 fi
 
 echo "✅ Postinstall setup completed!"
+
+# Show helpful information for Vercel builds
+if [ "$VERCEL" = "1" ]; then
+    echo "💡 For Vercel deployment:"
+    echo "   - Ensure PUBLIC_SALEOR_API_URL is set in environment variables"
+    echo "   - GraphQL types will be generated during the build process"
+fi

@@ -13,6 +13,7 @@
 		"prebuild": "svelte-kit sync && pnpm run generate",
 		"generate": "graphql-codegen --config .graphqlrc.ts && echo 'export * from \"./graphql\";' >> src/gql/index.ts",
 		"generate:clean": "npm config set verify-deps-before-run false && npm config set _jsr-registry '' && graphql-codegen --config .graphqlrc.ts",
+		"generate:test": "./scripts/test-graphql-gen.sh",
 		"sync": "svelte-kit sync",
 		"setup": "svelte-kit sync && pnpm run generate",
 		"postinstall": "./scripts/postinstall.sh",
@@ -44,7 +45,7 @@
 		"docker:status": "./status.sh",
 		"docker:dev": "./deploy.sh",
 		"docker:prod": "NODE_ENV=production ./deploy.sh",
-		"vercel:build": "pnpm run build",
+		"vercel:build": "cp svelte.config.vercel.js svelte.config.js && pnpm run setup && pnpm run build",
 		"vercel:dev": "vercel dev"
 	},
 	"dependencies": {

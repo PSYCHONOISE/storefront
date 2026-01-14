@@ -142,7 +142,6 @@ NODE_ENV=production ./deploy.sh
 ### Automated Deployment
 
 1. **Connect Repository**
-
    - Link your GitHub repository to Vercel
    - Auto-deploy on push to main branch
 
